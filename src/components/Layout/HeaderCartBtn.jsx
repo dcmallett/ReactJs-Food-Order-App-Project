@@ -5,7 +5,8 @@ import CartIcon from '../Cart/CartIcon';
 const HeaderCartBtn = (props) => {
     return (
         <Fragment>
-            <button className={styles.button}>
+            {/*NOTE: only time when a prop name passing through props is not up to you is on the button element. where we need to use onClick */}
+            <button className={styles.button} onClick={props.onShowCart}>
              <span className={styles.icon}>
                  <CartIcon />
              </span>
