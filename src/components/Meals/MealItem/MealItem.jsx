@@ -6,17 +6,17 @@ import CartContext from '../../../store/cart-context';
 
 const MealItem = (props) => {
     //we are fixing the price to 2 decimal places
-    const mealPrice = `£${props.mealPrice.toFixed(2)}`;
+    const price = `£${props.price.toFixed(2)}`;
 
     const cartCtx = useContext(CartContext);
 
 
     const addToCartHandler = (amount) => {
         cartCtx.addItem({
-            mealId: props.id,
-            mealName: props.name,
+            id: props.id,
+            name: props.name,
             amount: amount,
-            mealPrice: props.price,
+            price: props.price,
         })
     };
 
@@ -28,11 +28,11 @@ const MealItem = (props) => {
                             we defined mealName as our propName in the avilable meals (left side)
                             so we need to pass this into the component we are rendering into.
                     */}
-                    <h3>{props.mealName}</h3>
-                    <div className={styles.description}>{props.mealDescription}</div>
-                    <div className={styles.price}>{mealPrice}</div>
+                    <h3>{props.name}</h3>
+                    <div className={styles.description}>{props.description}</div>
+                    <div className={styles.price}>{price}</div>
                     <div>
-                        <MealItemForm onAddToCart={addToCartHandler} />
+                        <MealItemForm id={props.id} onAddToCart={addToCartHandler} />
                     </div>
                 </div>
             </li>
