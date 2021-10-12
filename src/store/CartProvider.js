@@ -9,10 +9,38 @@ const defaultCartState = {
 const cartReducer = (state, action) => {
     if (action.type === 'ADD_CART_ITEM') {
         //concat gives us a brand new array
-        const updatedCartItems = state.cartItems.concat(action.item)
-        const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount;
+        //when we are adding items we always want to calculate the updatyed total amount first
+        const updatedTotalAmount = 
+        state.totalAmount + action.item.price * action.item.amount;
+
+        //finds the index of an item in an array
+        //if the item were currently looking at in the array has the same id were adding with this action
+        //it will return us the index of the item if it exists
+        const existingCartItemIndex = state.cartItems.findIndex(item => item.id === action.item.id);
+        const existingCartItem = state.cartItems[existingCartItemIndex];
+
+        let updatedItems;
+
+        if (existingCartItem) {
+            //if its truthy we set the updatedItem to a new obj
+            //were we copy the existing cart item and we just update the amount i.e becuase the item already exists were just setting a new amount 
+            const updatedItem = {
+                ...existingCartItem,
+                amount: existingCartItem.amount + action.item.amount
+            };
+            //we are updating the list of cartItems but updating it immutably so we are creating a new array
+            //so we copy the old objs
+            updatedItems = [...state.cartItems];
+            updatedItems[existingCartItemIndex] = updatedItem
+        } else {
+            //else if its a new item the updated item is a brand new item were we copy the action item
+            updatedItems = state.cartItems.concat(action.item)
+        }
+
+        // const updatedCartItems = state.cartItems.concat(action.item)
+        //change cartItems below back to updatedCartItems if does not work
         return {
-            cartItems: updatedCartItems,
+            cartItems: updatedItems,
             totalAmount: updatedTotalAmount,
         };
     }
@@ -31,9 +59,9 @@ const CartProvider = (props) => {
     //with this CartProvider component. and add all the logic to managing the context data
     //to this component so its all maintained in 1 component
 
-    const addItemToCartHandler = (cartItem) => {
+    const addItemToCartHandler = (item) => {
         //we are forwording the cart item param 
-        dispatchCartAction({type: 'ADD_CART_ITEM', item: cartItem});
+        dispatchCartAction({type: 'ADD_CART_ITEM', item: item});
     }
 
     const removeItemFromCartHandler = (id) => {
