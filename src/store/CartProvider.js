@@ -54,12 +54,17 @@ const cartReducer = (state, action) => {
         let updatedItems;
 
         if(existingItem.amount === 1) {
+            //with this check we check all items that do not match the item.id is kept
             updatedItems = state.cartItems.filter (item => item.id !== action.id);
         } else {
+            //if the amount if greater than one we dont want to remove it we want to update the array
+            //and decrease the amount by 1
             const updatedItem = { ...existingItem, amount: existingItem.amount - 1 };
             updatedItems = [...state.cartItems];
             updatedItems[existingCartItemIndex] = updatedItem;
         }
+
+        //return a new state obj
         return  {
             cartItems: updatedItems,
             totalAmount: updatedTotalAmount
